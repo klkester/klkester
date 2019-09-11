@@ -2,7 +2,7 @@ This is a quick and dirty driver to pull weather data from DarkSky and use it to
 
 This was literally my first attempt at anything in Groovy and the first time in nearly 15 years I've even said the letters HTML or CSS.  Feel free to critique it, change it, make it better.  I'm under no impression that I've done anything spectacular with this.
 
-I leaned heavily (i.e.: liberally copied code and ideas) on the ApiXU driver written by banganli and used his hosted images for weather conditions.  Lacking a better host and knowing the images were already there, I used what was available.  There is an input field you can point to another host if you want to be a better person than I am.  
+I leaned heavily (i.e.: liberally copied code and ideas) on the ApiXU driver written by banganli and used his hosted images for weather conditions.  Lacking a better host and knowing the images were already there, I used what was available.  There is an input field you can point to another host if you want to be a better person than I am.  As for code, I think the only parts that are still mostly Bangali's are the getData and GetImgName functions.  Everything else I've rewritten but used his ApiXU driver as a cheat sheet.
 
 The original art for the weather icons can be found at:  https://www.deviantart.com/vclouds/art/VClouds-Weather-Icons-179152045
 Copy them to another host with their existing names and they should work just fine.
