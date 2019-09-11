@@ -14,15 +14,17 @@
 *
 *  Author: Kent Kester
 *
+*  Code can be found at:  https://github.com/klkester/klkester
+*
 *  Date: 2019-09-10
 *
 *  attribution: weather data courtesy: https://www.darksky.com/
-*  attribution: heavily adapted from ApiXU Driver by bengali
-*  attribution: icons shamelessly stolen from and hosted by bengali
+*  attribution: heavily adapted from ApiXU Driver by bangali
+*  attribution: icons shamelessly stolen from and hosted by bangali
 *
-*	Seriously, I mostly swiped the idea for this from Bengali.  There's a lot more data available than what I've presented.  I just wanted a working current+2 forecast for my dashboard.
+*	Seriously, I mostly swiped the idea for this from Bangali.  There's a lot more data available than what I've presented.  I just wanted a working current+2 forecast for my dashboard.
 *   I saw no need to make each value available as an attribute of the device.  I do understand why some of them might be usefull as such but it wasn't something I cared to do.
-*   The CustomTile1 (populated by CustomTile1Text) is something you may need to tweak to fit your dashboard.  Min ei sdesigned for am 8" Android tablet with a 6X4 grid dashboard.  The weather takes up 3X3 of that.
+*   The CustomTile1 (populated by CustomTile1Text) is something you may need to tweak to fit your dashboard.  Mine is designed for am 8" Android tablet with a 6X4 grid dashboard.  The weather takes up 3X3 of that.
 *
 * features:
 * - supports weather data with free api key from darksky.com (limited to 1000 requests per day on free API key)
@@ -32,7 +34,7 @@
 *
 ***********************************************************************************************************************/
 
-public static String version()	{return "v0.2.0"}
+public static String version()	{return "v0.3.0"}
 
 /**********************************************************************************************************************
 *
@@ -42,6 +44,8 @@ public static String version()	{return "v0.2.0"}
 *	Version 0.2.0
 *		First working version with a Current+2 Day forcast Tile.  Option for SI units instead of Imperial
 *
+*	Version 0.3.0
+*		Added input option to use a different host than bangali's hosting site for the images.
 ***********************************************************************************************************************/
 
 import groovy.transform.Field
@@ -67,6 +71,7 @@ metadata	{
 		input name:"Units", type: "enum", description: "", title: "Units", options: [["us":"US (Imperial)"],["si":"SI"],["uk2":"United Kingdom"]], defaultValue: "us"
         input "PollEvery", "enum", title:"Poll DarkSky how frequently?\nrecommended setting 30 minutes.", required:true, defaultValue:30, options:[5:"5 minutes",10:"10 minutes",15:"15 minutes",30:"30 minutes"]
 		input name:"LogsEnabled", type:"bool", title:"Logs Enabled", defaultValue:true
+		input name:"ImageHostURL", type:"text", title:"Image Host URL", required: true, defaultValue: "https://cdn.rawgit.com/adey/bangali/master/resources/icons/weather/"
 	}
 		
 }
@@ -80,8 +85,6 @@ def updated()	{
 	log.debug "updated"
     poll()
     "runEvery${PollEvery}Minutes"(poll)
-
-    // if (logEnable) runIn(1800,logsOff)
 	initialize()
 }
 
@@ -210,8 +213,6 @@ def poll()	{
 private getDSdata()   {
     def obs = [:]
 	def uritext = "https://api.darksky.net/forecast/" + DarkSkyAPIKey + "/" + Latitude + "," + Longitude + "?exclude=hourly"
-	//log.debug uritext
-    // def params = [ uri: uritext ]
 	def params = [ uri: "https://api.darksky.net/forecast/" + DarkSkyAPIKey + "/" + Latitude + "," + Longitude + "?exclude=hourly&exclude=minutely&units=$Units" ]
 
     try {
@@ -235,7 +236,7 @@ private isDay(Sunrise, Sunset)	{
 }
 
 private getImgName(Icon, IsDay)	{
-    def url = "https://cdn.rawgit.com/adey/bangali/master/resources/icons/weather/"
+    def url = ImageHostURL
     def imgItem = imgNames.find{ it.code == Icon && it.day == IsDay }
     return (url + (imgItem ? imgItem.img : 'na.png'))
 }
